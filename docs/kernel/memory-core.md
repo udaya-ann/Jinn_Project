@@ -96,7 +96,7 @@ O Memory Core usa múltiplas camadas de alocadores, cada otimizado para um caso 
 - Interfaces: `map_pages()`, `unmap_pages()`, `remap_pages()`
 
 **3. Capability System**
-- Medeia acesso a páginas através de capabilities
+- Media acesso a páginas através de capabilities
 - Cada tarefa tem set de capabilities vinculadas
 - Interfaces: `grant_capability()`, `revoke_capability()`
 
@@ -366,7 +366,7 @@ User Service          Kernel Memory Core          Buddy Allocator
    │
 5. Memory Core page fault handler:
    │
-   ├─ Verifica se é CoW (duh)
+   ├─ Verifica se a página está marcada como CoW
    │
    ├─ Aloca nova página via buddy
    │
@@ -420,8 +420,9 @@ Domain A                Kernel Memory Core           Domain B
   │                            │                    ┌─ Acesso
   │                            │◄───────────────────┘
   │                            │
-  │  (escritas simultâneas      │
-  │   causam cache conflicts)   │
+  │  (escritas simultâneas     │
+  │   podem causar conflitos   |
+  |   de cache)                │
 ```
 
 ## 7. Interfaces Públicas
@@ -504,7 +505,7 @@ pub fn mm_handle_page_fault(
 /// Compactação de páginas (usado quando memória está fragmentada)
 pub fn mm_compact() -> usize;  // Retorna páginas compactadas
 
-/// Enqueuer migration de página para NUMA node específico
+/// Enfileira a migração de uma página para um nó NUMA específico
 pub fn mm_migrate_to_node(vaddr: VirtualAddress, node: u8) -> Result<(), MemoryError>;
 
 /// Hook chamado pelo Predictive Engine
